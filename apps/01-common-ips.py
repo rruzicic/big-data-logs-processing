@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
 import os
+from datetime import datetime
 from pyspark.sql import SparkSession, Row
-from pyspark.sql.functions import *
-from pyspark.sql.types import *
+from pyspark.sql.functions import to_date, col
+from pyspark.sql.types import StructType, StructField, StringType, TimestampType
 
 
 def parse_log_row(s) -> Row:
@@ -13,7 +14,7 @@ def parse_log_row(s) -> Row:
     parsedRow[0],
     parsedRow[1],
     parsedRow[2],
-    parsedRow[3],
+    datetime.strptime(parsedRow[3], "%d/%b/%Y:%H:%M:%S %z"),
     Row(
       splitRequest[0],
       splitRequest[1],
@@ -68,7 +69,7 @@ logsSchema = StructType([
   StructField("remote_addr", StringType(), True),
   StructField("server_name", StringType(), True),
   StructField("remote_user", StringType(), True),
-  StructField("time_local", StringType(), True),
+  StructField("time_local", TimestampType(), True),
   StructField("request", StructType([
       StructField("method", StringType(), True),
       StructField("path", StringType(), True),
