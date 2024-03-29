@@ -85,8 +85,20 @@ services:
       - db_volume:/var/lib/postgresql/data
 
 
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./conf:/etc/grafana/provisioning/datasources
+      - grafana_storage:/var/lib/grafana
+
+
 volumes:
   hadoop_namenode:
   hadoop_datanode1:
   hadoop_datanode2:
   db_volume:
+  grafana_storage:
