@@ -6,6 +6,7 @@ from pyspark.sql.functions import split, col, window, to_timestamp
 sparkConfig = SparkConf().setAppName("stream-preprocessing")
 sparkConfig.set("spark.cleaner.referenceTracking.cleanCheckpoints", "true")
 sparkConfig.set("spark.sql.sources.partitionOverwriteMode", "dynamic")
+sparkConfig.set("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 
 spark = SparkSession.builder.config(conf=sparkConfig) \
     .getOrCreate()
@@ -50,7 +51,7 @@ schema =    "type STRING, " + \
 df = spark.readStream \
         .option("delimiter", " ") \
         .schema(schema) \
-        .csv(HDFS_NAMENODE + "/input/aws/")
+        .csv("s3a://ratko-test-bucket/input/aws/")
 
 df = df.withColumn("new_timestamp", to_timestamp("timestamp", "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'"))
 

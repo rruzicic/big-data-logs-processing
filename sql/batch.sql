@@ -83,5 +83,3 @@ FROM
      FROM parsed p
   ) AS ss
 WHERE pos <= 3;
-
--- 12. 

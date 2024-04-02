@@ -38,5 +38,5 @@ select
   split_part,
   count(split_part)
 from request_uri_stripped
-where new_timestamp >= (NOW() - INTERVAL '123213 hours' )
+where new_timestamp >= (NOW() - INTERVAL '1 hours' )
 group by split_part;

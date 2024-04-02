@@ -44,11 +44,14 @@ services:
       - 7077:7077
     environment: 
       - PYSPARK_PYTHON=python3
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     env_file:
       - ./hadoop.env
     volumes: 
       - ./apps:/home/apps
       - ./postgresql-42.2.10.jar:/jars/postgresql-42.2.10.jar
+      - ./hadoop-aws-3.3.2.jar:/jars/hadoop-aws-3.3.2.jar
 
   spark-worker1:
     image: bde2020/spark-worker:3.0.1-hadoop3.2
