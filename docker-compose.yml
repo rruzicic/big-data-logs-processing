@@ -51,7 +51,8 @@ services:
     volumes: 
       - ./apps:/home/apps
       - ./postgresql-42.2.10.jar:/jars/postgresql-42.2.10.jar
-      - ./hadoop-aws-3.3.2.jar:/jars/hadoop-aws-3.3.2.jar
+      - ./hadoop-aws-2.10.2.jar:/jars/hadoop-aws-2.10.2.jar
+      - ./hadoop-client-2.10.2.jar:/jars/hadoop-client-2.10.2.jar
 
   spark-worker1:
     image: bde2020/spark-worker:3.0.1-hadoop3.2
@@ -95,9 +96,22 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./conf:/etc/grafana/provisioning/datasources
+      - ./grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
       - grafana_storage:/var/lib/grafana
 
+  producer:
+    build:
+      context: producer
+      dockerfile: Dockerfile
+    container_name: producer
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime
+    environment: 
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 
 volumes:
   hadoop_namenode:

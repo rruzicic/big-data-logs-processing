@@ -126,7 +126,7 @@ logsSchema = StructType([
 ])
 
 dfFromTXT = spark.createDataFrame(
-  spark.sparkContext.textFile(HDFS_NAMENODE + "/input/access.log")
+  spark.sparkContext.textFile(HDFS_NAMENODE + "/input/test3.txt")
   .map(lambda x: parse_log_row(x)),
   logsSchema
 )
